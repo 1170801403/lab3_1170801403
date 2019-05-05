@@ -11,7 +11,7 @@ public class socialL1Test
 	String name = "a";
 	int age = 12;
 	char sex = "M".charAt(0);
-	socialL1 test = new socialL1(name, age, sex);
+	socialL1 test = new socialL1(name, age, sex,0,0);
 	
 	//Testing strategy for getName()
 	//采用特定的参数新建一个socialL1实例，表示社交网络中心人对象，然后调用getName()函数，

@@ -110,7 +110,7 @@ public class concreteCircularObjectTest
     public void addCentralObject()
     {
     	ConcreteCircularObject<L1,E1> testObject = new ConcreteCircularObject<L1,E1>();
-    	L1 central = new L1("YES");
+    	L1 central = new L1("YES",0,0);
     	testObject.addCentralObject(central);
     	assertTrue(testObject.getCentral().equals(central));
     }

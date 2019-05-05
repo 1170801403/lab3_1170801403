@@ -48,7 +48,7 @@ public class application
 		}
 		if (size.equals("s"))
 		{
-			//System.out.println("y");
+			System.out.println("y");
 			return "AtomicStructure.";
 			// System.out.println("y");
 		}
@@ -233,30 +233,30 @@ public class application
 		group2 = changeIn.nextInt();
 		System.out.println("track number:");
 		number2 = changeIn.nextInt();
-		if(group1>(track.getGroupTrackSystem().size()-1))
+		if (group1 > (track.getGroupTrackSystem().size() - 1))
 		{
 			System.out.println("first player's group number is out of bound!");
 			return;
 		}
-		if(group2>(track.getGroupTrackSystem().size()-1))
+		if (group2 > (track.getGroupTrackSystem().size() - 1))
 		{
 			System.out.println("second player's group number is out of bound!");
 			return;
 		}
-		if(track.getGroupTrackSystem().get(group1).getTrackObject().size()-1<number1)
+		if (track.getGroupTrackSystem().get(group1).getTrackObject().size() - 1 < number1)
 		{
 			System.out.println("first player's track number is out of bound!");
 			return;
 		}
-		if(track.getGroupTrackSystem().get(group1).getTrackObject().size()-1<number2)
+		if (track.getGroupTrackSystem().get(group1).getTrackObject().size() - 1 < number2)
 		{
 			System.out.println("second player's track number is out of bound!");
 			return;
 		}
-		
+
 		System.out.println("Adjust");
-		track.groupAdjust(group1,number1,group2,number2);
-		//number1 = changeIn.nextInt();
+		track.groupAdjust(group1, number1, group2, number2);
+		// number1 = changeIn.nextInt();
 //		{
 //			System.out.println("no Adjust");
 //			return;
@@ -480,6 +480,12 @@ public class application
 	public static void trackOrganizer2(functionTrackGame track)
 	{
 		trackOrganizer or = new trackOrganizer("g");
+		or.arrange(track);
+	}
+	
+	public static void trackOrganizer3(functionTrackGame track)
+	{
+		trackOrganizer or = new trackOrganizer("re");
 		or.arrange(track);
 	}
 
@@ -1193,43 +1199,75 @@ public class application
 			String another;
 			boolean again = true;
 			boolean choose = true;
+			boolean choose2 = true;
 			boolean fina = false;
-			System.out.println(
-					"Now please choose the method to divede group(R indicates random,G indicates results ahead):");
-			String choice = choiceOrder.next();
-			while (choose)
+			System.out.println("Now please choose the pattern(single or replay):");
+			String choice2 = choiceOrder.next();
+			
+			while (choose2)
 			{
-				if (choice.toLowerCase().equals("r"))
+				System.out.println(
+						"Now please choose the method to divede group(R indicates random,G indicates results ahead):");
+				String choice = choiceOrder.next();
+				if (choice2.equals("s"))
 				{
-					// track.autoCompetitionA();
+					choose2 = false;
+					while (choose)
+					{
+						if (choice.toLowerCase().equals("r"))
+						{
+							// track.autoCompetitionA();
 //					trackOrganizer organizer = new trackOrganizer("r");
 //					organizer.arrange();
-					trackOrganizer1(track);
-					fina = true;
-					choose = false;
+							trackOrganizer1(track);
+							fina = true;
+							choose = false;
+						}
+						else if (choice.toLowerCase().equals("g"))
+						{
+							// track.autoCompetitionB();
+							// trackOrganizer organizer = new trackOrganizer("g");
+							// organizer.arrange();
+							trackOrganizer2(track);
+							fina = true;
+							choose = false;
+						}
+						else
+						{
+							System.out.println("Wrong order!Input again?");
+							String yes = choiceOrder.next();
+							if (yes.toLowerCase().equals("n"))
+							{
+								choose = false;
+							}
+							else
+							{
+								System.out.println("Please input:");
+								choice = choiceOrder.next();
+								;
+							}
+						}
+					}
 				}
-				else if (choice.toLowerCase().equals("g"))
+				else if (choice2.equals("r"))
 				{
-					// track.autoCompetitionB();
-					// trackOrganizer organizer = new trackOrganizer("g");
-					// organizer.arrange();
-					trackOrganizer2(track);
+					choose2 = false;
 					fina = true;
-					choose = false;
+					trackOrganizer3(track);
+					
 				}
 				else
 				{
 					System.out.println("Wrong order!Input again?");
-					String yes = choiceOrder.next();
-					if (yes.toLowerCase().equals("n"))
+					String yes2 = choiceOrder.next();
+					if (yes2.toLowerCase().equals("n"))
 					{
-						choose = false;
+						choose2= false;
 					}
 					else
 					{
 						System.out.println("Please input:");
-						choice = choiceOrder.next();
-						;
+						choice2 = choiceOrder.next();
 					}
 				}
 			}

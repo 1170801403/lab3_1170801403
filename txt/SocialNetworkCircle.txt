@@ -7,7 +7,7 @@ SocialTie ::= <FrankLee, DavidChen, 0.02>
 SocialTie ::= <TommyWong, DavidChen, 0.342>
 SocialTie ::= <PonyMa, JackMa, 0.999>
 SocialTie ::= <FrankLee, JackMa, 0.999>
-
+JackMa
 Friend ::= <LisaWong, 25, F>
 Friend ::= <TomWong, 61, M>
 Friend ::= <FrankLee, 42, M>

@@ -33,12 +33,12 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 	Map<E, Set<E>> EErelationship;
 	Set<E> LErelationship;
 	List<tie> tempsocialTie;
-	L cretral;
+	L central;
 //	Map<String, E> friend;
 
 	public CircularOrbitHelper(circularOrbit c)// 构造函数
 	{
-		cretral = (L) c.getCentral();
+		central = (L) c.getCentral();
 		temptrackObject = c.getTrackObject();
 		trackNumber = temptrackObject.size();
 		EErelationship = c.getRelationship();
@@ -89,7 +89,34 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 			super.paintComponent(g);
 			int width = getWidth();
 			int height = getHeight();
-			g.fillOval(width / 2 - 16, height / 2 - 16, 32, 32);// 画中心点物体
+			if (central.getA1() == 0 && central.getA2() == 0)
+			{
+				g.fillOval(width / 2 - 16, height / 2 - 16, 32, 32);// 画中心点物体
+			}
+			else
+			{
+				int ri = 4;//半径
+				if(central.getA1()>0)
+				{
+					
+					g.setColor(Color.CYAN);
+					int p = central.getA1();
+					for(int i=0; i<p; i++)
+					{
+						g.fillOval(width / 2+i*(2*ri), height / 2-ri , 2*ri, 2*ri);
+					}
+				}
+				if(central.getA2()>0)
+				{
+					g.setColor(Color.darkGray);
+					int q = central.getA2();
+					for(int i=0; i<q; i++)
+					{
+						g.fillOval(width / 2-(i+1)*(2*ri), height / 2-ri , 2*ri, 2*ri);
+					}
+				}
+			}
+			g.setColor(Color.BLACK);
 			Iterator<Integer> iterator = temptrackObject.keySet().iterator();
 			int m = 0;
 			while (iterator.hasNext())
@@ -100,18 +127,18 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 				g.drawOval(width / 2 - (m + 1) * length, height / 2 - (m + 1) * length, doubleLength + doubleLength * m,
 						doubleLength + doubleLength * m);
 				int thingsNumber = thingsNumberPerTrack.get(realNumber);
-				System.out.println("thingsNumber" + thingsNumber);
+				//System.out.println("thingsNumber" + thingsNumber);
 				double partition;
 				if (thingsNumber != 0)// 加了一条轨道之后，新轨道上是没有物体的
 				{
-					partition = (Math.PI) / (double)(thingsNumber);
+					partition = (Math.PI) / ((double) thingsNumber);
 					// 画点部分
 					double a = 0.00;
 					// 获得该轨道上的所有物体
 					List<E> things = new ArrayList<E>(temptrackObject.get(realNumber));
 					for (int j = 0; j < thingsNumber; j++)
 					{
-
+						// cos的单位是弧度
 						a = a + partition;
 						int x = width / 2 - (m + 1) * length + (length * (m + 1))
 								+ (int) (((m + 1) * length) * Math.cos(a + j * partition));
@@ -156,7 +183,7 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 							thingsPosition.get(m1).getX(), thingsPosition.get(m1).getY());
 					// 在连线上注明亲密度,亲密度的颜色是蓝色
 					g.setColor(Color.blue);
-					for(int mn=0; mn<tempsocialTie.size(); mn++)
+					for (int mn = 0; mn < tempsocialTie.size(); mn++)
 					{
 //						if(friend.containsKey(tempsocialTie.get(i).getName1())&&friend.containsKey(tempsocialTie.get(i).getName2()))
 //						{
@@ -164,10 +191,13 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 //							int numbery = (thingsPosition.get(r1).getY()+thingsPosition.get(m1).getY())/2;
 //							g.drawString(Float.toString(tempsocialTie.get(m).getIni()), numberx, numbery);
 //						}
-						if((r1.getName().equals(tempsocialTie.get(mn).getName1())&&m1.getName().equals(tempsocialTie.get(mn).getName2()))||(r1.getName().equals(tempsocialTie.get(mn).getName2())&&m1.getName().equals(tempsocialTie.get(mn).getName1())))
+						if ((r1.getName().equals(tempsocialTie.get(mn).getName1())
+								&& m1.getName().equals(tempsocialTie.get(mn).getName2()))
+								|| (r1.getName().equals(tempsocialTie.get(mn).getName2())
+										&& m1.getName().equals(tempsocialTie.get(mn).getName1())))
 						{
-							int numberx = (thingsPosition.get(r1).getX()+thingsPosition.get(m1).getX())/2;
-							int numbery = (thingsPosition.get(r1).getY()+thingsPosition.get(m1).getY())/2;
+							int numberx = (thingsPosition.get(r1).getX() + thingsPosition.get(m1).getX()) / 2;
+							int numbery = (thingsPosition.get(r1).getY() + thingsPosition.get(m1).getY()) / 2;
 							g.drawString(Float.toString(tempsocialTie.get(mn).getIni()), numberx, numbery);
 						}
 //						if(r1.getName().equals(tempsocialTie.get(m).getName2())&&m1.getName().equals(tempsocialTie.get(m).getName1()))
@@ -206,13 +236,16 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 				E r2 = iterator2.next();
 				g.drawLine(width / 2, height / 2, thingsPosition.get(r2).getX(), thingsPosition.get(r2).getY());
 				g.setColor(Color.blue);
-				for(int v=0; v<tempsocialTie.size(); v++)
+				for (int v = 0; v < tempsocialTie.size(); v++)
 				{
-					//这个判断实际上比较冗余，如果把friend加到concretecircularOrbit里面就会好很多
-					if((r2.getName().equals(tempsocialTie.get(v).getName1())&&cretral.getName().equals(tempsocialTie.get(v).getName2()))||(r2.getName().equals(tempsocialTie.get(v).getName2())&&cretral.getName().equals(tempsocialTie.get(v).getName1())))
+					// 这个判断实际上比较冗余，如果把friend加到concretecircularOrbit里面就会好很多
+					if ((r2.getName().equals(tempsocialTie.get(v).getName1())
+							&& central.getName().equals(tempsocialTie.get(v).getName2()))
+							|| (r2.getName().equals(tempsocialTie.get(v).getName2())
+									&& central.getName().equals(tempsocialTie.get(v).getName1())))
 					{
-						int numberx = (thingsPosition.get(r2).getX()+width/2)/2;
-						int numbery = (thingsPosition.get(r2).getY()+height/2)/2;
+						int numberx = (thingsPosition.get(r2).getX() + width / 2) / 2;
+						int numbery = (thingsPosition.get(r2).getY() + height / 2) / 2;
 						g.drawString(Float.toString(tempsocialTie.get(v).getIni()), numberx, numbery);
 					}
 //					if(r1.getName().equals(tempsocialTie.get(m).getName2())&&m1.getName().equals(tempsocialTie.get(m).getName1()))

@@ -19,7 +19,7 @@ public class Track
 	// String本身是不可变的，同时中心物体的名称是final类型，指向不会改变
 	public void checkRep()
 	{
-		assertTrue(rep>=0);
+		assertTrue(rep >= 0);
 	}
 
 	public Track(int rep)// 构造函数

@@ -13,7 +13,7 @@ import centralObject.*;
 
 //½Ó¿ÚÖĞµÄ·ºĞÍÊÇobjectµÄ£¬ConcreteCircularObjectÖĞµÄ·ºĞÍÊÇÓĞÏŞ¶¨µÄ£¬ConcreteCircularObject×ÓÀàÖĞµÄ·ºĞÍÒ²ÊÇÓĞÏŞ¶¨µÄ
 //Èç¹û½Ó¿ÚºÍConcreteCircularObjectÖĞµÄ·ºĞÍ¶¼ÊÇ<L extends L1,E extends E1>£¬¾Í»á³ö´í
-public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿ÚºóÃæ±ØĞë¼Ó¼âÀ¨ºÅ£¬·ñÔò»á´í£¬¶øÇÒ²»ÄÜ¼Óextends£¬µ«½Ó¿Ú±¾ÉíµÄ¶¨ÒåÀï¿ÉÒÔ¼Óextends
+public class ConcreteCircularObject<L ,E > implements circularOrbit<L, E>// ½Ó¿ÚºóÃæ±ØĞë¼Ó¼âÀ¨ºÅ£¬·ñÔò»á´í£¬¶øÇÒ²»ÄÜ¼Óextends£¬µ«½Ó¿Ú±¾ÉíµÄ¶¨ÒåÀï¿ÉÒÔ¼Óextends
 {
 	L central;// Ä¬ÈÏ×´Ì¬£¬Í¬Ò»¸ö°üÄÚ¿É¼û£¬Ã»ÓĞgetº¯Êı£¬¶ÔÓÚ¿Í»§¶Ë´úÂëÀ´½²·´¶ø¸ü¼Ó°²È«
 	final List<Track> physical = new ArrayList<Track>();// ÁĞ±í±àºÅ±íÊ¾¹ìµÀ²ãºÅ£¬¹ìµÀ¶ÔÏóÖĞ°üº¬ÎïÌåE,Î´°ÑTrackµ±³ÉÕ¼Î»·û
@@ -40,33 +40,47 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 		assertTrue(relationship.size()!=0);
 		assertTrue(angle.size()!=0);
 	}
+	
 	public List<Track> getPhysical()
 	{
 		List<Track> tempphysical = new ArrayList<Track>();
-		for (int i = 0; i < physical.size(); i++)
+		for(int i=0; i<physical.size(); i++)
 		{
 			tempphysical.add(physical.get(i));
 		}
 		return tempphysical;
 	}
-
+	
+	
 	@Override
 	public List<tie> getSocialTie()
 	{
 		List<tie> tempSocialTie = new ArrayList<tie>();
-		for (int i = 0; i < socialTie.size(); i++)
+		for(int i=0; i<socialTie.size(); i++)
 		{
 			tempSocialTie.add(socialTie.get(i));
 		}
 		return tempSocialTie;
 	}
-
-
-	public L getCentral()// LÊÇ²»¿É±äµÄ
+	// ÎªgetDifferenceº¯Êı·şÎñ
+//	@Override
+//	public Map<E, Integer> getObjectGroup()
+//	{
+//		Map<E, Integer> temp = new HashMap<E, Integer>();
+//		Iterator<E> iterator = objectGroup.keySet().iterator();
+//		while(iterator.hasNext())
+//		{
+//			E etemp = iterator.next();
+//			int itemp = objectGroup.get(etemp);//×Ô¶¯²ğ°ü
+//			temp.put(etemp, itemp);
+//		}
+//		return temp;
+//		
+//	}
+	public L getCentral()//LÊÇ²»¿É±äµÄ
 	{
 		return central;
 	}
-
 	public Set<E> getLErelationship()// ·µ»Ø¹ìµÀÉÏËùÓĞµÄÎïÌå
 	{
 		Iterator<E> iterator = LErelationship.iterator();
@@ -175,17 +189,21 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 		while (iterator.hasNext())
 		{
 			E temp = iterator.next();
-			if (objectTrack.containsKey(temp))
+			if(objectTrack.containsKey(temp))
 			{
 				objectTrack.remove(temp);
 			}
+//			if (relationship.containsKey(temp))
+//			{
+//				relationship.remove(temp);// É¾³ı¹ìµÀµÄÍ¬Ê±£¬¹ìµÀÉÏµÄÎïÌåÍ¬ÆäËûÎïÌåµÄ¹ØÏµÒ²ĞèÒª±»É¾³ı
+//			}
 			if (relationship.containsKey(temp))
 			{
 				Iterator<E> iterator2 = relationship.get(temp).iterator();
-				while (iterator2.hasNext())
+				while(iterator2.hasNext())
 				{
 					E temp1 = iterator2.next();
-					if (relationship.get(temp1).contains(temp))
+					if(relationship.get(temp1).contains(temp))
 					{
 						relationship.get(temp1).remove(temp);
 					}
@@ -212,7 +230,7 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 				trackObject.get(t).add(ob);// ÉèÖÃ¹ìµÀµ½ÎïÌåµÄÓ³Éä
 				objectTrack.put(ob, t);// ÉèÖÃÎïÌåµ½¹ìµÀµÄÓ³Éä
 				angle.put(ob, 0.00);// ³õÊ¼Ê±½Ç¶ÈÎª0
-				// Ôö¼Ó¹ìµÀµÄÊ±ºò¾ÍÔö¼Ó¹ØÏµ
+				//Ôö¼Ó¹ìµÀµÄÊ±ºò¾ÍÔö¼Ó¹ØÏµ
 				relationship.put(ob, new HashSet<E>());
 				// addLErelationship(ob);// Ïò¹ìµÀÉÏÔö¼ÓÎïÌå£¬¸ÃÎïÌåÓëÖĞĞÄÎïÌå²»Ò»¶¨Ö±½ÓÏà¹Ø£¬ÀıÈçÉç½»ÍøÂçÖĞÁ½²ã¼°ÒÔÉÏµÄÈËÓëÖĞĞÄÎïÌå¾ÍÃ»ÓĞÃ÷ÏÔ¹ØÏµ
 				System.out.println("Succeed!");
@@ -245,9 +263,9 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 				}
 				else
 				{
-					// É¾³ı¹ØÏµÒ»¶¨ÒªÉ¾µÄ³¹µ×
+					//É¾³ı¹ØÏµÒ»¶¨ÒªÉ¾µÄ³¹µ× 
 					trackObject.get(t).remove(ob);// É¾³ı¹ìµÀµ½ÎïÌåµÄÓ³Éä
-					if (objectTrack.containsKey(ob))
+					if(objectTrack.containsKey(ob))
 					{
 						objectTrack.remove(ob, t);// É¾³ıÎïÌåµ½¹ìµÀµÄÓ³Éä
 					}
@@ -258,10 +276,10 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 					if (relationship.containsKey(ob))
 					{
 						Iterator<E> iterator = relationship.get(ob).iterator();
-						while (iterator.hasNext())
+						while(iterator.hasNext())
 						{
 							E temp1 = iterator.next();
-							if (relationship.get(temp1).contains(ob))
+							if(relationship.get(temp1).contains(ob))
 							{
 								relationship.get(temp1).remove(ob);
 							}
@@ -309,7 +327,7 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 		if (t < physical.size())
 		{
 
-			// Ö»¸Ä±äÎïÌåÔÚ¹ìµÀÉÏµÄÎ»ÖÃ£¬²»Éæ¼°¹ØÏµµÄ¸Ä±ä
+			//Ö»¸Ä±äÎïÌåÔÚ¹ìµÀÉÏµÄÎ»ÖÃ£¬²»Éæ¼°¹ØÏµµÄ¸Ä±ä
 			if (objectTrack.containsKey(ob))
 			{
 				int tempTrack = objectTrack.get(ob);
@@ -332,7 +350,101 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 
 	}
 
+	// Õë¶ÔÔË¶¯Ô±¶ÔÏó
+	// @Override
+//	public boolean move(E object, double sitha)// Èç¹ûÄ³¹ìµÀÎïÌåĞè¿¼ÂÇÆä¾ø¶ÔÎ»ÖÃ£¬²¢¿É´ÓÒ»¸öÎ»ÖÃÒÆ¶¯µ½ÁíÒ»
+//	// ¸öÎ»ÖÃ£¬½« object ´Óµ±Ç°Î»ÖÃÒÆ¶¯µ½ĞÂµÄ sitha ½Ç¶ÈËù¶ÔÓ¦µÄÎ»ÖÃ
+//	{
+//		for(int i=0; i<physical.size(); i++)
+//		{
+//			if(physical.get(i).getTrackPhysical().contains(object))
+//			{
+//				object.setSitha(sitha);
+//				return true;
+//			}
+//		}
+//		System.out.println("The object is not in orbit");
+//		return false;
+//		
+//	}
 
+//	@Override
+//	public boolean addRelationshipBetweenTwoTracks(int t1, E e1, int t2, E e2)// Ôö¼ÓÁ½¸ö¹ìµÀÎïÌåÖ®¼äµÄ¹ØÏµ
+//	{
+//		// ÓÃ¼¯ºÏ´úÌæÁĞ±í£¬ÆäÊµÒ²Òªiterator±éÀú
+//		if (t1 <= physical.size() && t2 <= physical.size())
+//		{
+//			Set<E> temp = physical.get(t1).getTrackPhysical();
+//			Set<E> temp2 = physical.get(t2).getTrackPhysical();
+//			if(temp.contains(e1))//×ÓÀà¿ÉÒÔ¸³Öµ¸ø¸¸Àà£¬ÏòÉÏ×ªĞÍÊÇ°²È«µÄ£¬µ÷ÓÃ·½·¨Ê±µ÷ÓÃµÄ»¹ÊÇ×ÓÀàµÄ·½·¨
+//			{
+//				if(temp2.contains(e2))
+//				{
+//					Iterator<E> iterator = temp.iterator();
+//					while(iterator.hasNext())
+//					{
+//						E tempe = iterator.next();
+//						if(tempe == e1)
+//						{
+//							Iterator<E> iterator2 = temp2.iterator();
+//							while(iterator2.hasNext())
+//							{
+//								E tempe2 = iterator2.next();
+//								if(temp2 == e2)//==±¾ÖÊÉÏ±È½ÏµÄÊÇÄÚ´æÖĞµÄÄÚÈİ
+//								{
+//									//½øĞĞÁªÏµµÄ²Ù×÷£»
+//									e1.getRelationship().add(e2);//´Ë´¦²»ÄÜÓÃtemp
+//									e2.getRelationship().add(e1);
+//									
+//								}
+//							}
+//						}
+//					}
+//					return true;//µ±È·¶¨ÁËÁ½¹ìµÀ¶¼º¬ÓĞÏàÓ¦ÎïÌåÊ±£¬¾Í¿ÉÒÔ·µ»ØtrueÁË
+//				}
+//				else 
+//				{
+//					System.out.println("the target track doesn't contains e2!");
+//					return false;
+//				}
+//			}
+//			else 
+//			{
+//				System.out.println("the initial track doesn't contains e1!");
+//				return false;
+//			}
+//		}
+//		else 
+//		{
+//			System.out.println("the track is out of bound!");
+//			return false;
+//		}
+//	}
+//
+//	@Override
+//	public boolean addRelationshipBetweenCentralAndTrack(L central, int number, E e)// Ôö¼ÓÖĞĞÄÎïÌåºÍ¹ìµÀÎïÌåÖ®¼äµÄ¹ØÏµ
+//	{
+//		if(number<=physical.size())
+//		{
+//			if(physical.get(number).getTrackPhysical().contains(e))
+//			{
+//				central.getRelation().add(e);//²»ĞèÒªÔÚ¾ßÌå¹ìµÀÉÏÕÒµ½Õâ¸öe£¬ÒòÎª²»ÊÇ¶Ôe½øĞĞ²Ù×÷
+//				return true;
+//			}
+//			else 
+//			{
+//				System.out.println("There is no target object in orbit!");
+//				return false;
+//			}
+//		}
+//		else
+//		{
+//			System.out.println("the track is out of bound!");
+//			return false;
+//			
+//		}
+//		
+//	}
 	public boolean addEErelationship(E e1, E e2)
 	{
 
@@ -401,12 +513,19 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// ½Ó¿Úº
 			System.out.println("object1 is not in the orbit system!");
 			return false;
 		}
-		if (LErelationship.contains(e2))
+		if(LErelationship.contains(e2))
 		{
 			LErelationship.remove(e2);
 		}
 		return true;
 	}
 
+
+//	@Override
+//	public Map<String, E> getFriend()
+//	{
+//		// TODO Auto-generated method stub
+//		return null;
+//	}
 
 }

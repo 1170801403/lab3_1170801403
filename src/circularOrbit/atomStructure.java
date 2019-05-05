@@ -144,7 +144,7 @@ public class atomStructure extends ConcreteCircularObject<atomL1, atomE1>
 		{
 			String word2 = m.group(7);// 原子核名称
 //			central = new atomL1(word2);// 创造中心点物体
-			central = factory.manufactureL(word2);
+			central = factory.manufactureL(word2,3,4);//3个质子五个中子
 			String int1 = m.group(15);// 原子核外轨道数目
 			trackNumber2 = Integer.parseInt(int1);// 确定核外轨道数目
 //			for (int i = 0; i < trackNumber2; i++)// 构造轨道系统

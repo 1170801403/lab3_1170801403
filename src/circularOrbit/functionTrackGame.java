@@ -19,8 +19,6 @@ import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-
 import abstractFactory.trackFactory;
 import physicalObject.trackE1;
 import centralObject.*;
@@ -214,6 +212,280 @@ public class functionTrackGame
 
 	}
 
+	public void autoCompetitionC()
+	{
+		Random rand = new Random();
+		Iterator<trackE1> iterator = athlete.iterator();
+		while (iterator.hasNext()) // 将集合中的元素转移到列表中
+		{
+			athleteForRandom.add(iterator.next());// 应该是传地址调用
+		}
+		int total = athlete.size();
+		System.out.println(trackNumber);
+		int lastTeam = total % 4;// 最后一组应该分多少人
+		int team = total / 4;// 应该分多少组
+		int remainder;
+		int group;
+		if (lastTeam == 0)
+		{
+			remainder = team % trackNumber;
+			group = team / trackNumber;
+		}
+		else
+		{
+			remainder = (team + 1) % trackNumber;
+			group = (team + 1) / trackNumber;
+		}
+		if (remainder == 0)
+		{
+			// trackE1 groupPlayer[][] = new trackE1[group][trackNumber];
+			for (int i = 0; i < group; i++)// group也是通过physical.size()计算出来的
+			{
+				if (i != group - 1)
+				{
+					trackGame temp = new trackGame();
+					for (int k = 0; k < trackNumber; k++)
+					{
+						temp.addTrack();
+					}
+					groupTrackSystem.add(temp);
+					for (int j = 0; j < trackNumber; j++)
+					{
+						int random = rand.nextInt(athleteForRandom.size());
+						// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+						// 对运动员设置组别
+						// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+						// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+						// groupPlayer[i][j] = athleteForRandom.get(random);
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					}
+				}
+				else
+				{
+					trackGame temp = new trackGame();
+					for (int k = 0; k < remainder; k++)// 只需要增加remainder条轨道
+					{
+						temp.addTrack();
+					}
+					groupTrackSystem.add(temp);
+					int team2;
+					if (lastTeam == 0)// 最后一组的每一个跑道上都有四个运动员
+					{
+						team2 = team;
+						for (int j = 0; j < trackNumber; j++)
+						{
+							int random = rand.nextInt(athleteForRandom.size());
+							// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+							// 对运动员设置组别
+							// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+							// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+							// groupPlayer[i][j] = athleteForRandom.get(random);
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						}
+
+					}
+					else// 最后一组的最后一个跑道上不足四个运动员
+					{
+						team2 = team + 1;
+						for (int j = 0; j < trackNumber - 1; j++)
+						{
+							int random = rand.nextInt(athleteForRandom.size());
+							// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+							// 对运动员设置组别
+							// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+							// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+							// groupPlayer[i][j] = athleteForRandom.get(random);
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+							random = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+							athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						}
+						int random2;
+						for (int k = 0; k < lastTeam; k++)
+						{
+							random2 = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random2), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random2), trackNumber - 1);// 对运动员设置轨道,此时设置了角度
+							athleteForRandom.remove(random2);// 后面的数字会自动往前移动
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < group; i++)// group也是通过physical.size()计算出来的
+			{
+
+				trackGame temp = new trackGame();
+				for (int k = 0; k < trackNumber; k++)
+				{
+					temp.addTrack();
+				}
+				groupTrackSystem.add(temp);
+				for (int j = 0; j < trackNumber; j++)
+				{
+					int random = rand.nextInt(athleteForRandom.size());
+					// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+					// 对运动员设置组别
+					// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+					// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+					// groupPlayer[i][j] = athleteForRandom.get(random);
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+				}
+			}
+			int i = group;
+			trackGame temp = new trackGame();
+			for (int k = 0; k < trackNumber; k++)
+			{
+				temp.addTrack();
+			}
+			groupTrackSystem.add(temp);
+			for(int j=0; j<remainder; j++)
+			{
+				if(j!=remainder-1)
+				{
+					int random = rand.nextInt(athleteForRandom.size());
+					// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+					// 对运动员设置组别
+					// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+					// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+					// groupPlayer[i][j] = athleteForRandom.get(random);
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+					random = rand.nextInt(athleteForRandom.size());
+					objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+					groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+					athleteForRandom.remove(random);// 后面的数字会自动往前移动
+				}
+				else
+				{
+					if(lastTeam == 0)
+					{
+						int random = rand.nextInt(athleteForRandom.size());
+						// trackObject.get(physical.get(j)).add(athleteForRandom.get(random));//
+						// 对运动员设置组别
+						// temp.setTrackNumber(j);多余语句，增加物体的函数中已经实现了改功能
+						// addTrackObject(athleteForRandom.get(random), j);// 向轨道上增加物体
+						// groupPlayer[i][j] = athleteForRandom.get(random);
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);// 对运动员设置轨道,此时设置了角度
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+
+						random = rand.nextInt(athleteForRandom.size());
+						objectGroup.put(athleteForRandom.get(random), i);// 对运动员设置组别
+						groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random), j);
+						athleteForRandom.remove(random);// 后面的数字会自动往前移动
+					}
+					else
+					{
+						int random3;
+						for(int h=0; h<lastTeam; h++)
+						{
+							random3 = rand.nextInt(athleteForRandom.size());
+							objectGroup.put(athleteForRandom.get(random3), i);// 对运动员设置组别
+							groupTrackSystem.get(i).addTrackObject(athleteForRandom.get(random3), j);// 对运动员设置轨道,此时设置了角度
+							athleteForRandom.remove(random3);// 后面的数字会自动往前移动
+							
+						}
+					}
+				}
+			}
+
+		}
+	}
+
 	public boolean autoCompetitionA()
 	{
 		Random rand = new Random();
@@ -293,7 +565,6 @@ public class functionTrackGame
 				athleteForRandom.remove(random);// 后面的运动员会向前移动，保证同一个运动员只能出现在一组比赛中
 			}
 		}
-
 		System.out.println("Succeed!");
 		return true;
 	}

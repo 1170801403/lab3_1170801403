@@ -13,6 +13,8 @@ public  class trackOrganizer
 			case "g":
 		     	yes = new trackStrategyG();
 				break;
+			case "re":
+				yes = new trackStrategyRE();
 			default:
 				break;
 		}

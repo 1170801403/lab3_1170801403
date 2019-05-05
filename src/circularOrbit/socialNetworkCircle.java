@@ -294,7 +294,7 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 			String w2 = m.group(11);// 年龄
 			String c7 = m.group(12);
 			String c8 = m.group(14);// 性别
-			central = factory.manufactureL(c5, Integer.parseInt(w2), c8.charAt(0));// 构造中心点物体
+			central = factory.manufactureL(c5, Integer.parseInt(w2), c8.charAt(0), 0, 0);// 构造中心点物体
 		}
 //		new socialL1(c5, Integer.parseInt(w2), c8.charAt(0))
 		// Friend里的人不一定和中心点人有关系
@@ -632,6 +632,7 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 		System.out.println("SocialTie的大小是：" + socialTie.size());
 //		Iterator<String> iterator = socialTie.keySet().iterator();
 		addTrack();// 建立第一条轨道，哪怕社交网络中一个人没有，也会默认建立一条轨道
+		//第一次，只加第一层物体
 		for (int i = 0; i < socialTie.size(); i++)
 		{
 			String normalSalphanum1 = socialTie.get(i).getName1();
@@ -674,26 +675,27 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 				}
 				else
 				{
-					if (!(friend.containsKey(normalSalphanum1)))
-					{
-						System.out.println("The friend map doesn't contains it!");
-						return;
-					}
-					socialE1 person = friend.get(normalSalphanum1);
-					if (!objectTrack.containsKey(person))
-					{
-						System.out.println("Central!");
-						addTrackObject(person, 0);// 已经往objectTrack中加入了映射
-						addLErelationship(person);
-						superIntimacyFriend.put(normalSalphanum1, normalSfloat1);
-					}
-					else
-					{
-						System.out.println("Central!");
-						transit(person, 0);// 已经往objectTrack中更新了映射
-						addLErelationship(person);
-						superIntimacyFriend.put(normalSalphanum1, normalSfloat1);// superIntimacyFriend可以在重新建立轨道系统的时候清零，因为它并没有在读文件的时候初始化
-					}
+					// 由轨道外的指向中心物体的关系可以被直接忽略
+//					if (!(friend.containsKey(normalSalphanum1)))
+//					{
+//						System.out.println("The friend map doesn't contains it!");
+//						return;
+//					}
+//					socialE1 person = friend.get(normalSalphanum1);
+//					if (!objectTrack.containsKey(person))
+//					{
+//						System.out.println("Central!");
+//						addTrackObject(person, 0);// 已经往objectTrack中加入了映射
+//						addLErelationship(person);
+//						superIntimacyFriend.put(normalSalphanum1, normalSfloat1);
+//					}
+//					else
+//					{
+//						System.out.println("Central!");
+//						transit(person, 0);// 已经往objectTrack中更新了映射
+//						addLErelationship(person);
+//						superIntimacyFriend.put(normalSalphanum1, normalSfloat1);// superIntimacyFriend可以在重新建立轨道系统的时候清零，因为它并没有在读文件的时候初始化
+//					}
 					// addLErelationship(friend.get(normalSalphanum1));
 					// addTrackObject(friend.get(normalSalphanum1), 0);// 已知物体，就可以知道它所在的轨道
 				}
@@ -716,12 +718,15 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 				socialE1 person2 = friend.get(normalSalphanum2);
 				if (objectTrack.containsKey(person1) && objectTrack.containsKey(person2))
 				{
-					System.out.println("EE!");
-					// 亲密度映射
-					intimacyFriend.get(normalSalphanum1).put(normalSalphanum2, normalSfloat1);
-					intimacyFriend.get(normalSalphanum2).put(normalSalphanum1, normalSfloat1);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
-					// 关系映射
-					addEErelationship(person2, person1);// 调用的是父类中的方法
+					if (!(objectTrack.get(person1) > objectTrack.get(person2)))
+					{
+						System.out.println("EE!");
+						// 亲密度映射
+						intimacyFriend.get(normalSalphanum1).put(normalSalphanum2, normalSfloat1);
+						intimacyFriend.get(normalSalphanum2).put(normalSalphanum1, normalSfloat1);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
+						// 关系映射
+						addEErelationship(person2, person1);// 调用的是父类中的方法
+					}
 
 				}
 
@@ -806,14 +811,17 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 			socialE1 person2 = friend.get(t2);
 			if (objectTrack.containsKey(person1) && objectTrack.containsKey(person2))
 			{
-				System.out.println("EE!");
-				// addTrackObject(friend.get(t2), objectTrack.get(t1) + 1);
-				// 亲密度映射
-				intimacyFriend.get(t1).put(t2, ft3);
-				intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
-				// 关系映射
-				addEErelationship(person2, person1);
-				// addEERelationship只需调用一次即可，函数内部会加两次关系
+				if (!(objectTrack.get(person1) > objectTrack.get(person2)))
+				{
+					System.out.println("EE!");
+					// addTrackObject(friend.get(t2), objectTrack.get(t1) + 1);
+					// 亲密度映射
+					intimacyFriend.get(t1).put(t2, ft3);
+					intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
+					// 关系映射
+					addEErelationship(person2, person1);
+					// addEERelationship只需调用一次即可，函数内部会加两次关系
+				}
 			}
 
 			// 下面的两个else-if语句是处理双向情况，当要求处理单向情况时，删去一条分支即可
@@ -833,8 +841,7 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 				}
 				else
 				{
-					System.out
-							.println("EEADDppppppppppppppppppppppppppppppppppppppppppppppppppppp!" + person2.getName());
+					System.out.println("EEADD!");
 					addTrack();
 					addTrackObject(person2, objectTrack.get(person1) + 1);
 					// 亲密度映射
@@ -876,8 +883,10 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 			{
 				System.out.println("do its again!");
 			}
-		}
 
+		}
+		
+		//第三次总结
 		for (int i = 0; i < temp1.size(); i++)
 		{
 			String t1 = temp1.get(i);
@@ -915,32 +924,33 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 						// addEERelationship只需调用一次即可，函数内部会加两次关系
 					}
 				}
-				else if (objectTrack.containsKey(person2)&& !objectTrack.containsKey(person1))
-				{
-					if ((physical.size() - 1) > objectTrack.get(person2))
-					{
-						System.out.println("EE!");
-						addTrackObject(person1, objectTrack.get(person2) + 1);
-						// 亲密度映射
-						intimacyFriend.get(t1).put(t2, ft3);
-						intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
-						// 关系映射
-						addEErelationship(person2, person1);
-						// addEERelationship只需调用一次即可，函数内部会加两次关系
-					}
-					else
-					{
-						System.out.println("EEADD!");
-						addTrack();
-						addTrackObject(person1, objectTrack.get(person2) + 1);
-						// 亲密度映射
-						intimacyFriend.get(t1).put(t2, ft3);
-						intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
-						// 关系映射
-						addEErelationship(person2, person1);
-						// addEERelationship只需调用一次即可，函数内部会加两次关系
-					}
-				}
+				//只支持单向关系
+//				else if (objectTrack.containsKey(person2)&& !objectTrack.containsKey(person1))
+//				{
+//					if ((physical.size() - 1) > objectTrack.get(person2))
+//					{
+//						System.out.println("EE!");
+//						addTrackObject(person1, objectTrack.get(person2) + 1);
+//						// 亲密度映射
+//						intimacyFriend.get(t1).put(t2, ft3);
+//						intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
+//						// 关系映射
+//						addEErelationship(person2, person1);
+//						// addEERelationship只需调用一次即可，函数内部会加两次关系
+//					}
+//					else
+//					{
+//						System.out.println("EEADD!");
+//						addTrack();
+//						addTrackObject(person1, objectTrack.get(person2) + 1);
+//						// 亲密度映射
+//						intimacyFriend.get(t1).put(t2, ft3);
+//						intimacyFriend.get(t2).put(t1, ft3);// 两个物体都在轨道上，不用加轨道，加亲密度就可以
+//						// 关系映射
+//						addEErelationship(person2, person1);
+//						// addEERelationship只需调用一次即可，函数内部会加两次关系
+//					}
+//				}
 				else
 				{
 					System.out.println("sorry!");
