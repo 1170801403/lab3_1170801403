@@ -1256,6 +1256,7 @@ public class application
 					switch (order)
 					{
 						case 0:
+							//结束操作
 							again = false;
 							break;
 						case 1:
@@ -1280,17 +1281,13 @@ public class application
 							break;
 						case 6:
 							System.out.println("The entropy of the system is:" + trackEntropy(track));
-							break;
-//					case 7:
-//						track.autoCompetitionA();
-//						break;
-//					case 8:
-//						track.autoCompetitionB();
-//						break;
+							break;							
 						case 7:
+							//更换轨道
 							trackChange(track);
-							break;
+							break;						
 						case 8:
+							//检查轨道系统的合法性
 							trackCheck(track);
 							break;
 						default:
@@ -1319,36 +1316,7 @@ public class application
 			}
 			System.out.println("结束了");
 		}
-//			boolean c = false;
-//			String size = "2";
-//			while (!c)
-//			{
-//				System.out.println("Please input the size of track(s,m,l):");
-//				size = in.next();
-//				if (size.toLowerCase().equals("s") || size.toLowerCase().equals("m")
-//						|| size.toLowerCase().equals("l"))
-//				{
-//					c = true;
-//				}
-//				else
-//				{
-//					System.out.println("Sorry,this size is illegal.Please input again;");
-//				}
-//			}
-//			if(size.equals("s"))
-//			{
-//				trackcreatingTrackFromFiles("s");
-//			}
-//			else if(size.equals("m"))
-//			{
-//				trackcreatingTrackFromFiles("m");
-//			}
-//			else
-//			{
-//				trackcreatingTrackFromFiles("l");
-//			}
 
-		// }
 		else if (type.toLowerCase().equals("atom"))
 		{
 			atomCareTaker careTaker = new atomCareTaker();
@@ -1382,6 +1350,7 @@ public class application
 				switch (order)
 				{
 					case 0:
+						//操作结束
 						again = false;
 						break;
 					case 1:
@@ -1405,12 +1374,15 @@ public class application
 						atomDeleteObject(atom);
 						break;
 					case 6:
+						//求熵值
 						System.out.println("The entropy of the system is:" + atomEntropy(atom));
 						break;
 					case 7:
+						//电子跃迁
 						atomTransit(atom, careTaker, originator);// 没问题
 						break;
 					case 8:
+						//回溯
 						atomGoBack(atom, careTaker, originator);// 有问题
 						break;
 					default:
@@ -1506,12 +1478,15 @@ public class application
 						socialDeleteObject(society);// 需要改进，1不应该让用户输入具体的轨道数字(已解决)2调整之后的结构不对(已解决)
 						break;
 					case 6:
+						//求熵值
 						System.out.println("The entropy of the system is:" + socialEntropy(society));
 						break;
 					case 7:
+						//求通过第一层的某个好友能间接认识多少个好友
 						socialIntimacy(society);// 有问题（已解决）
 						break;
 					case 8:
+						//增加/删除关系后重新调整图结构
 						socialAR(society);// 仅限于轨道物体间的关系增减，未将中心物体包含在内,需要重新调整图结构(已解决)
 						break;
 					case 9:
@@ -1527,6 +1502,7 @@ public class application
 																												// 问题2：仅限于轨道物体，未将中心物体包含在内（已改正）
 						break;
 					case 10:
+						//检查轨道系统的合法性
 						socialCheck(society);// 有问题(已解决)
 					default:
 						break;

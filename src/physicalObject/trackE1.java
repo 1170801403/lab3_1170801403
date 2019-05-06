@@ -8,15 +8,6 @@ public class trackE1 extends E1
 	private final String nationaility;//国籍
 	private final int age;//年龄
 	private final double best;//本年度最好成绩
-	//private int group;//所在组别，这个可以改
-//	public int getGroup()
-//	{
-//		return group;
-//	}
-//	public void setGroup(int group)
-//	{
-//		this.group = group;
-//	}
 	public trackE1(String name,int number,String nationaility,int age,double best)
 	{
 		super(name);//父类构造函数
@@ -42,21 +33,9 @@ public class trackE1 extends E1
 	{
 		return best;
 	}
-//	@Override
-//	public int compareTo(Object o)//实现comparable接口，使用treeSet排序
-//	{
-//		if(this.best - ((trackE1)o).getBest()>0)
-//		{
-//			return 1;
-//		}
-//		else 
-//		{
-//			return 0;
-//		}
-//	}
-	public boolean equals(trackE1 temp)//当运动员的所有参数都相同时，说明是两个相同的运动员
+	public boolean equals(trackE1 temp)//比较两个运动员是否是同一个运动员
 	{
-		//double的成绩在其他地方比较
+
 		if(temp.getName().equals(this.getName())&&temp.getAge() == this.age&&temp.getNumber() == this.number&&temp.getNationaility().equals(this.nationaility))
 		{
 			return true;

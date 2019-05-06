@@ -87,7 +87,7 @@ public class functionTrackGame
 		String re15 = "(,)"; // Any Single Character 8
 		String re16 = "(\\d{1,2}\\.\\d{2}+)"; // Float 1，最佳成绩
 		String re17 = "(>)"; // Any Single Character 9
-//		([+-]?\\d*\\.\\d+)(?![-+0-9\\.])
+
 		try
 		{
 			txt = new String(Files.readAllBytes(Paths.get("txt/" + name + "txt")));
@@ -107,13 +107,9 @@ public class functionTrackGame
 			String word2 = m.group(12);// 国籍
 			String int2 = m.group(14);// 年龄
 			String float1 = m.group(16);// 最佳成绩
-//			trackE1 temp = new trackE1(word1, Integer.parseInt(int1), word2, Integer.parseInt(int2),
-//					Float.parseFloat(float1));
 			trackE1 temp = factory.manufactureE(word1, Integer.parseInt(int1), word2, Integer.parseInt(int2),
 					Float.parseFloat(float1));
 			athlete.add(temp);// parseInt和parseFloat都是构造常量
-			// sithaTrackE1.put(temp, 0.00);// 默认位于角度0
-			// 利用集合的互异性
 		}
 
 		String re18 = "(Game)"; // Word 1
@@ -149,10 +145,7 @@ public class functionTrackGame
 			String int12 = m2.group(7);
 			trackNumber = Integer.parseInt(int12);// 得到轨道数目
 		}
-//		for (int i = 0; i < trackNumber; i++)
-//		{
-//			addTrack();// 构造轨道系统
-//		}
+
 	}
 	// 读文件的过程中，初始化了所有运动员对象，得到了比赛种类，轨道数目
 
@@ -185,7 +178,12 @@ public class functionTrackGame
 			System.out.println("The group is out of bound!");
 			return false;
 		}
-		if (groupTrackSystem.get(groupNumebr).trackObject.get(trackNumebr).size() != 0)// 规定一条轨道上至多只有一位运动员
+		if(!groupTrackSystem.get(groupNumebr).trackObject.containsKey(trackNumebr))
+		{
+			System.out.println("The track has been deleted!");
+			return false;
+		}
+		if(groupTrackSystem.get(groupNumebr).trackObject.get(trackNumebr).size() != 0)// 规定一条轨道上至多只有一位运动员
 		{
 			System.out.println("There is already an athlete in the track!");
 			return false;
@@ -194,18 +192,23 @@ public class functionTrackGame
 		return true;
 	}
 
-	public boolean deleteObject(int groupNumebr, int trackNumebr)
+	public boolean deleteObject(int groupNumebr, int trackNumber)
 	{
 		if (groupNumebr >= groupTrackSystem.size())
 		{
 			System.out.println("The group is out of bound!");
 			return false;
 		}
-		Iterator<trackE1> iterator = groupTrackSystem.get(groupNumebr).getTrackObject().get(trackNumebr).iterator();
+		if(!groupTrackSystem.get(groupNumebr).getTrackObject().containsKey(trackNumber))
+		{
+			System.out.println("The track doesn't exist!");
+			return false;
+		}
+		Iterator<trackE1> iterator = groupTrackSystem.get(groupNumebr).getTrackObject().get(trackNumber).iterator();
 		while (iterator.hasNext())
 		{
 			trackE1 delete = iterator.next();
-			groupTrackSystem.get(groupNumebr).deleteTrackObject(delete, trackNumebr);
+			groupTrackSystem.get(groupNumebr).deleteTrackObject(delete, trackNumber);
 			return true;
 		}
 

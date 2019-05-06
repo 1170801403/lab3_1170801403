@@ -19,42 +19,32 @@ import physicalObject.trackE1;
 public class CircularOrbitAPIs<L, E>
 {
 
-	
-	public double getObjectDistributionEntropy(circularOrbit c)//如果不加public的话，就是同一个包里可见，不同包里就不可见，即使new了一个对象再使用也不行
+	public double getObjectDistributionEntropy(circularOrbit c)// 如果不加public的话，就是同一个包里可见，不同包里就不可见，即使new了一个对象再使用也不行
 	{
-		double entropy=0.00;
-		int num=0;
-		Map<Integer,Set<E>> temp = c.getTrackObject();
+		double entropy = 0.00;
+		int num = 0;
+		Map<Integer, Set<E>> temp = c.getTrackObject();
 		int trackNumber = temp.size();
 		List<Double> probability = new ArrayList<Double>();
 		Iterator<Integer> iterator = temp.keySet().iterator();
-		while(iterator.hasNext())
+		while (iterator.hasNext())
 		{
 			Set<E> etemp = temp.get(iterator.next());
 			num = num + temp.size();
 		}
-//		for(int i=0; i<trackNumber; i++)
-//		{
-//			num = num + temp.get(i).size();
-//		}
 		Iterator<Integer> iterator2 = temp.keySet().iterator();
-		while(iterator2.hasNext())
+		while (iterator2.hasNext())
 		{
 			Set<E> etemp2 = temp.get(iterator2.next());
-			double e = (double)etemp2.size()/(double)num;
+			double e = (double) etemp2.size() / (double) num;
 			probability.add(e);
 		}
-//		for(int i=0; i<trackNumber; i++)
-//		{
-//			double e = (double)temp.get(i).size()/(double)num;
-//			probability.add(e);
-//		}
-		for(int i=0; i<probability.size(); i++)
+		for (int i = 0; i < probability.size(); i++)
 		{
 			double e1 = probability.get(i);
-			entropy = entropy + e1*Math.log(e1);
+			entropy = entropy + e1 * Math.log(e1);
 		}
-		return (-1)*entropy;
+		return (-1) * entropy;
 	}
 
 	public CircularOrbitAPIs()
@@ -64,29 +54,18 @@ public class CircularOrbitAPIs<L, E>
 
 	// 这个方法如果应用到socialNetWork中，其值与两物体的轨道号之差应该是相同的
 	// 只在social轨道中添加了关系
-	public int getLogicalDistance(circularOrbit c, E e1, E e2)//无法判断e1和e2相同的情况
+	public int getLogicalDistance(circularOrbit c, E e1, E e2)// 无法判断e1和e2相同的情况
 	{
-		// 处于轨道上，就已经说明了它们不是中心物体
-//		if (!c.getObjectTrack().containsKey(e1))
-//		{
-//			System.out.println("The first object is not in the orbit system!");
-//			return -1;
-//		}
-//		if (!c.getObjectTrack().containsKey(e2))
-//		{
-//			System.out.println("The second object is not in the orbit system!");
-//			return -1;
-//		}
-		// 层序遍历4
-		if(e1.equals(e2))
+		// 层序遍历
+		if (e1.equals(e2))
 		{
 			return 0;
 		}
 		int length = 1;
-		//Map<E, Integer> grade = new HashMap<E, Integer>();
+		// Map<E, Integer> grade = new HashMap<E, Integer>();
 		Map<E, Set<E>> real = c.getRelationship();
 		List<E> queue = new ArrayList<E>();
-		Set<E> flag = new HashSet<E>();//集合内的人都已经被访问过了
+		Set<E> flag = new HashSet<E>();// 集合内的人都已经被访问过了
 		queue.add(e1);
 
 		while (queue.size() != 0)
@@ -98,27 +77,36 @@ public class CircularOrbitAPIs<L, E>
 				E e = queue.get(0);// 队首元素出队
 				queue.remove(0);
 
-				Set<E> tempReal = real.get(e);// 获取当前点的所有关联点的集合
-				Iterator<E> iterator = tempReal.iterator();// 对该集合进行遍历
-
-				while (iterator.hasNext())
+				if (real.containsKey(e))
 				{
-					E te = iterator.next();
-					// 这一步意味着必须重写三个应用类中的equals方法
-					if (te.equals(e2))
-					{
-						return length;
-					}
-					else
-					{
-						if (!flag.contains(te))
-						{
-							flag.add(te);
-							cQueue.add(te);
-						}
-					}
+					Set<E> tempReal = real.get(e);// 获取当前点的所有关联点的集合
+					Iterator<E> iterator = tempReal.iterator();// 对该集合进行遍历
 
+					while (iterator.hasNext())
+					{
+						E te = iterator.next();
+						// 这一步意味着必须重写三个应用类中的equals方法
+						if (te.equals(e2))
+						{
+							return length;
+						}
+						else
+						{
+							if (!flag.contains(te))
+							{
+								flag.add(te);
+								cQueue.add(te);
+							}
+						}
+
+					}
 				}
+				else
+				{
+					System.out.println("the person shouldn't appear in the orbit system!");
+					return -8;
+				}
+
 			}
 			queue = cQueue;
 			length++;
@@ -127,58 +115,9 @@ public class CircularOrbitAPIs<L, E>
 		return -2;// 全部遍历之后还没有return,说明两点之间没有路径
 
 	}
- 
-//	int centralGetLogicalDistance(circularOrbit c, L l1, E e1)
-//	{
-//		if (!c.getObjectTrack().containsKey(e2))
-//		{
-//			System.out.println("The second object is not in the orbit system!");
-//			return -1;
-//		}
-//		int length = 1;
-//		//Map<E, Integer> grade = new HashMap<E, Integer>();
-//		Map<E, Set<E>> real = c.getRelationship();
-//		List<E> queue = new ArrayList<E>();
-//		Set<E> flag = new HashSet<E>();//集合内的人都已经被访问过了
-//		queue.add(l1);
-//
-//		while (queue.size() != 0)
-//		{
-//			int size = queue.size();
-//			List<E> cQueue = new ArrayList<E>();
-//			for (int i = 0; i < size; i++)
-//			{
-//				E e = queue.get(0);// 队首元素出队
-//				queue.remove(0);
-//
-//				Set<E> tempReal = real.get(e);// 获取当前点的所有关联点的集合
-//				Iterator<E> iterator = tempReal.iterator();// 对该集合进行遍历
-//
-//				while (iterator.hasNext())
-//				{
-//					E te = iterator.next();
-//					// 这一步意味着必须重写三个应用类中的equals方法
-//					if (te.equals(e2))
-//					{
-//						return length;
-//					}
-//					else
-//					{
-//						if (!flag.contains(te))
-//						{
-//							flag.add(te);
-//							cQueue.add(te);
-//						}
-//					}
-//
-//				}
-//			}
-//			queue = cQueue;
-//			length++;
-//		}
-//		return -2;// 全部遍历之后还没有return,说明两点之间没有路径
-//	}
-   public double getPhysicalDistance(circularOrbit c, E e1, E e2)
+
+
+	public double getPhysicalDistance(circularOrbit c, E e1, E e2)
 	{
 		double distance;
 		Map<E, Double> temp = c.getAngle();
@@ -211,148 +150,129 @@ public class CircularOrbitAPIs<L, E>
 		boolean socialType1 = c1 instanceof socialNetworkCircle;
 		boolean socialType2 = c2 instanceof socialNetworkCircle;
 		if (trackType1 == true && trackType2 == true)
-		//分组问题的处理:
-			//先把组找好，再按照组的顺序比较，需要改动trackGame中分组的过程
+		// 分组问题的处理:
+		// 先把组找好，再按照组的顺序比较，需要改动trackGame中分组的过程
 		{
-			Map<Integer, Set<socialE1>> temp1 = c1.getTrackObject();//为什么需要改成socialE1，因为E是object对象，没有name
+			Map<Integer, Set<socialE1>> temp1 = c1.getTrackObject();// 为什么需要改成socialE1，因为E是object对象，没有name
 			Map<Integer, Set<socialE1>> temp2 = c2.getTrackObject();
-			if(trackNumber1 == trackNumber2)
+			if (trackNumber1 == trackNumber2)
 			{
-				for(int i=0; i<trackNumber1; i++)
+				for (int i = 0; i < trackNumber1; i++)
 				{
 					String first = new String();
 					String second = new String();
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext()) 
+					while (iterator.hasNext())
 					{
-						first = first+iterator.next().getName();
+						first = first + iterator.next().getName();
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext()) 
+					while (iterator2.hasNext())
 					{
-						second = second+iterator2.next().getName();
+						second = second + iterator2.next().getName();
 					}
-					d.numberTrack.put(i, temp1.get(i).size()-temp2.get(i).size());
-					d.stringTrack.put(i, first+"-"+second);					
+					d.numberTrack.put(i, temp1.get(i).size() - temp2.get(i).size());
+					d.stringTrack.put(i, first + "-" + second);
 				}
 			}
-			else if(trackNumber1 > trackNumber2)//1的轨道数更多
+			else if (trackNumber1 > trackNumber2)// 1的轨道数更多
 			{
-				for(int i=0; i<trackNumber2; i++)
+				for (int i = 0; i < trackNumber2; i++)
 				{
 					String first = new String();
 					String second = new String();
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext()) 
+					while (iterator.hasNext())
 					{
-						first = first+iterator.next().getName();
+						first = first + iterator.next().getName();
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext()) 
+					while (iterator2.hasNext())
 					{
-						second = second+iterator2.next().getName();
+						second = second + iterator2.next().getName();
 					}
-					d.numberTrack.put(i, temp1.get(i).size()-temp2.get(i).size());
-					d.stringTrack.put(i, first+"-"+second);					
+					d.numberTrack.put(i, temp1.get(i).size() - temp2.get(i).size());
+					d.stringTrack.put(i, first + "-" + second);
 				}
-				for(int j=trackNumber2; j<trackNumber1; j++)
+				for (int j = trackNumber2; j < trackNumber1; j++)
 				{
 					String first = new String();
 					Set<socialE1> stemp1 = temp1.get(j);
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext()) 
+					while (iterator.hasNext())
 					{
-						first = first+iterator.next().getName();
+						first = first + iterator.next().getName();
 					}
 					d.numberTrack.put(j, temp1.get(j).size());
-					d.stringTrack.put(j, first+"-");	
+					d.stringTrack.put(j, first + "-");
 				}
 			}
-			else//2的轨道数更多
+			else// 2的轨道数更多
 			{
-				for(int i=0; i<trackNumber1; i++)
+				for (int i = 0; i < trackNumber1; i++)
 				{
 					String first = new String();
 					String second = new String();
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext()) 
+					while (iterator.hasNext())
 					{
-						first = first+iterator.next().getName();
+						first = first + iterator.next().getName();
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext()) 
+					while (iterator2.hasNext())
 					{
-						second = second+iterator2.next().getName();
+						second = second + iterator2.next().getName();
 					}
-					d.numberTrack.put(i, temp1.get(i).size()-temp2.get(i).size());
-					d.stringTrack.put(i, first+"-"+second);					
+					d.numberTrack.put(i, temp1.get(i).size() - temp2.get(i).size());
+					d.stringTrack.put(i, first + "-" + second);
 				}
-				for(int j=trackNumber1; j<trackNumber2; j++)
+				for (int j = trackNumber1; j < trackNumber2; j++)
 				{
 					String second = new String();
 					Set<socialE1> stemp2 = temp2.get(j);
 					Iterator<socialE1> iterator = stemp2.iterator();
-					while(iterator.hasNext()) 
+					while (iterator.hasNext())
 					{
-						second = second+iterator.next().getName();
+						second = second + iterator.next().getName();
 					}
 					d.numberTrack.put(j, -temp1.get(j).size());
-					d.stringTrack.put(j, "-"+second);	
+					d.stringTrack.put(j, "-" + second);
 				}
 			}
-//			if(trackNumber1 == trackNumber2)
-//			{
-//				for(int i=0; i<trackNumber1; i++)
-//				{
-//					Map<Integer, Set<trackE1>> tempTrackObject = c1.getTrackObject();
-//					Set<trackE1> tem = tempTrackObject.get(i);
-//					
-//					//Map<Integer, trackE1> tempTrackObject2 = c2.getTrackObject();
-//					//String name2 = tempTrackObject2.get(i).getName();
-//					if(name1.equals(name2))
-//					{
-//						d.track.put("0", );
-//					}
-//					else
-//					{
-//						d.track.put(name1+"-"+name2, 0);
-//					}
-//				}
-//			}
 		}
 		else if (atomType1 == true && atomType2 == true)
 		{
-			if(trackNumber1 == trackNumber2)
+			if (trackNumber1 == trackNumber2)
 			{
 				Map<Integer, Set<atomE1>> atemp = c1.getTrackObject();
 				Map<Integer, Set<atomE1>> atemp2 = c2.getTrackObject();
-				for(int i=0; i<trackNumber1; i++)
+				for (int i = 0; i < trackNumber1; i++)
 				{
-					//归根到底还是要往电子轨道上加电子
+					// 归根到底还是要往电子轨道上加电子
 					Set<atomE1> stemp = atemp.get(i);
 					Set<atomE1> stemp2 = atemp2.get(i);
-					int dnumber = stemp.size()-stemp2.size();
+					int dnumber = stemp.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
 			}
-			else if(trackNumber1 > trackNumber2)
+			else if (trackNumber1 > trackNumber2)
 			{
 				Map<Integer, Set<atomE1>> atemp = c1.getTrackObject();
 				Map<Integer, Set<atomE1>> atemp2 = c2.getTrackObject();
-				for(int i=0; i<trackNumber2; i++)
+				for (int i = 0; i < trackNumber2; i++)
 				{
 					Set<atomE1> stemp = atemp.get(i);
 					Set<atomE1> stemp2 = atemp2.get(i);
-					int dnumber = stemp.size()-stemp2.size();
+					int dnumber = stemp.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
-				for(int j=trackNumber2; j<trackNumber1; j++)
+				for (int j = trackNumber2; j < trackNumber1; j++)
 				{
 					Set<atomE1> stemp = atemp.get(j);
 					d.numberTrack.put(j, stemp.size());
@@ -362,14 +282,14 @@ public class CircularOrbitAPIs<L, E>
 			{
 				Map<Integer, Set<atomE1>> atemp = c1.getTrackObject();
 				Map<Integer, Set<atomE1>> atemp2 = c2.getTrackObject();
-				for(int i=0; i<trackNumber1; i++)
+				for (int i = 0; i < trackNumber1; i++)
 				{
 					Set<atomE1> stemp = atemp.get(i);
 					Set<atomE1> stemp2 = atemp2.get(i);
-					int dnumber = stemp.size()-stemp2.size();
+					int dnumber = stemp.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
-				for(int j=trackNumber1; j<trackNumber2; j++)
+				for (int j = trackNumber1; j < trackNumber2; j++)
 				{
 					Set<atomE1> stemp = atemp2.get(j);
 					d.numberTrack.put(j, -stemp.size());
@@ -378,197 +298,185 @@ public class CircularOrbitAPIs<L, E>
 		}
 		else if (socialType1 == true && socialType2 == true)
 		{
-			
-			if(trackNumber1 == trackNumber2)
+
+			if (trackNumber1 == trackNumber2)
 			{
 				Map<Integer, Set<socialE1>> temp1 = c1.getTrackObject();
-				Map<Integer, Set<socialE1>> temp2 =c2.getTrackObject();
-				for(int i=0; i<trackNumber1; i++)
+				Map<Integer, Set<socialE1>> temp2 = c2.getTrackObject();
+				for (int i = 0; i < trackNumber1; i++)
 				{
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
 					List<socialE1> firstHave = new ArrayList<socialE1>();
 					List<socialE1> secondHave = new ArrayList<socialE1>();
-					
-					
+
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext())
+					while (iterator.hasNext())
 					{
 						socialE1 person1 = iterator.next();
-						if(!stemp2.contains(person1))
+						if (!stemp2.contains(person1))
 						{
 							firstHave.add(person1);
 						}
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext())
+					while (iterator2.hasNext())
 					{
 						socialE1 person2 = iterator.next();
-						if(!stemp1.contains(person2))
+						if (!stemp1.contains(person2))
 						{
 							secondHave.add(person2);
 						}
 					}
-					
-					
+
 					String first = new String();
-					for(int j=0; j<firstHave.size(); j++)
+					for (int j = 0; j < firstHave.size(); j++)
 					{
-						first = first +","+firstHave.get(j).getName();
+						first = first + "," + firstHave.get(j).getName();
 					}
 					String second = new String();
-					for(int k=0; k<secondHave.size(); k++)
+					for (int k = 0; k < secondHave.size(); k++)
 					{
-						second = second +","+secondHave.get(k).getName();
+						second = second + "," + secondHave.get(k).getName();
 					}
-					
-					
-					d.stringTrack.put(i, "{"+first+"}"+"-"+"{"+second+"}");
-					//该条轨道上物体数量的差异
-					int dnumber = stemp1.size()-stemp2.size();
+
+					d.stringTrack.put(i, "{" + first + "}" + "-" + "{" + second + "}");
+					// 该条轨道上物体数量的差异
+					int dnumber = stemp1.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
 			}
-			else if(trackNumber1>trackNumber2)//1系统的轨道数目更多
+			else if (trackNumber1 > trackNumber2)// 1系统的轨道数目更多
 			{
 				Map<Integer, Set<socialE1>> temp1 = c1.getTrackObject();
-				Map<Integer, Set<socialE1>> temp2 =c2.getTrackObject();
-				for(int i=0; i<trackNumber2; i++)
+				Map<Integer, Set<socialE1>> temp2 = c2.getTrackObject();
+				for (int i = 0; i < trackNumber2; i++)
 				{
 					List<socialE1> firstHave = new ArrayList<socialE1>();
 					List<socialE1> secondHave = new ArrayList<socialE1>();
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
-					
-					
+
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext())
+					while (iterator.hasNext())
 					{
 						socialE1 person1 = iterator.next();
-						if(!stemp2.contains(person1))
+						if (!stemp2.contains(person1))
 						{
 							firstHave.add(person1);
 						}
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext())
+					while (iterator2.hasNext())
 					{
 						socialE1 person2 = iterator.next();
-						if(!stemp1.contains(person2))
+						if (!stemp1.contains(person2))
 						{
 							secondHave.add(person2);
 						}
 					}
-					
-					
+
 					String first = new String();
-					for(int j=0; j<firstHave.size(); j++)
+					for (int j = 0; j < firstHave.size(); j++)
 					{
-						first = first +","+firstHave.get(j).getName();
+						first = first + "," + firstHave.get(j).getName();
 					}
 					String second = new String();
-					for(int k=0; k<secondHave.size(); k++)
+					for (int k = 0; k < secondHave.size(); k++)
 					{
-						second = second +","+secondHave.get(k).getName();
+						second = second + "," + secondHave.get(k).getName();
 					}
-					d.stringTrack.put(i, "{"+first+"}"+"-"+"{"+second+"}");
-					//该条轨道上物体数量的差异
-					int dnumber = stemp1.size()-stemp2.size();
+					d.stringTrack.put(i, "{" + first + "}" + "-" + "{" + second + "}");
+					// 该条轨道上物体数量的差异
+					int dnumber = stemp1.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
-				for(int i=trackNumber2; i<trackNumber1; i++)
+				for (int i = trackNumber2; i < trackNumber1; i++)
 				{
 					List<socialE1> firstHave = new ArrayList<socialE1>();
 					Set<socialE1> stemp1 = temp1.get(i);
-					
-					
+
 					Iterator<socialE1> iterator = stemp1.iterator();
-					while(iterator.hasNext())
+					while (iterator.hasNext())
 					{
 						socialE1 person1 = iterator.next();
 						firstHave.add(person1);
 					}
-					
-					
+
 					String first = new String();
-					for(int j=0; j<firstHave.size(); j++)
+					for (int j = 0; j < firstHave.size(); j++)
 					{
-						first = first +","+firstHave.get(j).getName();
+						first = first + "," + firstHave.get(j).getName();
 					}
-					d.stringTrack.put(i, "{"+first+"}"+"-"+"0");
+					d.stringTrack.put(i, "{" + first + "}" + "-" + "0");
 				}
 			}
-			else//2系统的轨道数目更多
+			else// 2系统的轨道数目更多
 			{
 				Map<Integer, Set<socialE1>> temp1 = c1.getTrackObject();
-				Map<Integer, Set<socialE1>> temp2 =c2.getTrackObject();
-				for(int i=0; i<trackNumber1; i++)
+				Map<Integer, Set<socialE1>> temp2 = c2.getTrackObject();
+				for (int i = 0; i < trackNumber1; i++)
 				{
 					Set<socialE1> stemp1 = temp1.get(i);
 					Set<socialE1> stemp2 = temp2.get(i);
 					List<socialE1> firstHave = new ArrayList<socialE1>();
 					List<socialE1> secondHave = new ArrayList<socialE1>();
 					Iterator<socialE1> iterator = stemp1.iterator();
-					
-					
-					while(iterator.hasNext())
+
+					while (iterator.hasNext())
 					{
 						socialE1 person1 = iterator.next();
-						if(!stemp2.contains(person1))
+						if (!stemp2.contains(person1))
 						{
 							firstHave.add(person1);
 						}
 					}
 					Iterator<socialE1> iterator2 = stemp2.iterator();
-					while(iterator2.hasNext())
+					while (iterator2.hasNext())
 					{
 						socialE1 person2 = iterator.next();
-						if(!stemp1.contains(person2))
+						if (!stemp1.contains(person2))
 						{
 							secondHave.add(person2);
 						}
 					}
-					
-					
+
 					String first = new String();
-					for(int j=0; j<firstHave.size(); j++)
+					for (int j = 0; j < firstHave.size(); j++)
 					{
-						first = first +","+firstHave.get(j).getName();
+						first = first + "," + firstHave.get(j).getName();
 					}
 					String second = new String();
-					for(int k=0; k<secondHave.size(); k++)
+					for (int k = 0; k < secondHave.size(); k++)
 					{
-						second = second +","+secondHave.get(k).getName();
+						second = second + "," + secondHave.get(k).getName();
 					}
-					
-					
-					d.stringTrack.put(i, "{"+first+"}"+"-"+"{"+second+"}");
-					//该条轨道上物体数量的差异
-					int dnumber = stemp1.size()-stemp2.size();
+
+					d.stringTrack.put(i, "{" + first + "}" + "-" + "{" + second + "}");
+					// 该条轨道上物体数量的差异
+					int dnumber = stemp1.size() - stemp2.size();
 					d.numberTrack.put(i, dnumber);
 				}
-				for(int i=trackNumber1; i<trackNumber2; i++)
+				for (int i = trackNumber1; i < trackNumber2; i++)
 				{
 					Set<socialE1> stemp2 = temp2.get(i);
 					Iterator<socialE1> iterator = stemp2.iterator();
 					List<socialE1> secondHave = new ArrayList<socialE1>();
-					
-					
-					while(iterator.hasNext())
+
+					while (iterator.hasNext())
 					{
 						socialE1 person2 = iterator.next();
 						secondHave.add(person2);
 					}
-					
-					
+
 					String second = new String();
-					for(int j=0; j<secondHave.size(); j++)
+					for (int j = 0; j < secondHave.size(); j++)
 					{
-						second = second +","+secondHave.get(j).getName();
+						second = second + "," + secondHave.get(j).getName();
 					}
-					d.stringTrack.put(i, "0"+"-"+"{"+second+"}");
+					d.stringTrack.put(i, "0" + "-" + "{" + second + "}");
 				}
-			}
+			}   
 		}
 		else
 		{

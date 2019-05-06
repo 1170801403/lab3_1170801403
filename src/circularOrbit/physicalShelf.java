@@ -10,26 +10,26 @@ public class physicalShelf implements aggregate
 	private int last = 0;
 
 	// 构造函数
-	// 查找书籍
-	public E1 getBookAt(int index)
+	// 查找物体
+	public E1 getphysicalAt(int index)
 	{
 		return physical[index];
 	}
 
-	// 添加书籍
-	public void appendBook(E1 book)
+	// 添加物体
+	public void appendphysical(E1 book)
 	{
 		this.physical[last] = book;
 		last++;
 	}
 
-	// 获得书架存书的数量
+	// 获得容器中物体的数量
 	public int getLength()
 	{
 		return physical.length;
 	}
 
-	// 获得书架迭代器对象
+	// 获得物体迭代器对象
 	@Override
 	public physicalIterator iterator()
 	{

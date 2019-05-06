@@ -25,18 +25,15 @@ import physicalObject.trackE1;
 
 public class socialNetworkCircle extends ConcreteCircularObject<socialL1, socialE1>
 {
-//	private  Set<String> friendName = new HashSet<String>();
+
 	// 两个人不可能同名，因为socialTie中只写了姓名
 	private final Map<String, socialE1> friend = new HashMap<String, socialE1>();// 通过名字找到人
 	private final Map<String, Map<String, Float>> intimacyFriend = new HashMap<String, Map<String, Float>>();// 存储轨道人间的亲密度
-	// private final Map<String, Map<String, Float>> socialTie = new HashMap<String,
-	// Map<String, Float>>();// 存储socialTie中的内容，将读取文件和建立轨道分离开来
-	// private final List<tie> socialTie = new ArrayList<tie>();
 	private final Map<String, Float> superIntimacyFriend = new HashMap<String, Float>();// 存储与中心人的亲密度
 	private final List<String> temp1 = new ArrayList<String>();// 存储例外情况
-	private final List<String> temp2 = new ArrayList<String>();
-	private final List<Float> temp3 = new ArrayList<Float>();
-	private socialFactory factory = new socialFactory();
+	private final List<String> temp2 = new ArrayList<String>();// 存储例外情况
+	private final List<Float> temp3 = new ArrayList<Float>();// 存储例外情况
+	private socialFactory factory = new socialFactory();//工厂方法
 
 	//
 	public Map<String, socialE1> getFriend()
@@ -370,24 +367,12 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 		// addEErelationship：一个映射，映射的value值还是一个映射，仅限于轨道物体
 		// superIntimacyFriend: 存储第一层轨道上的人与中心物体之间的关系，以及亲密度
 		// intimacyFriend：仅限于轨道物体，跟中心物体无任何关系，其中key值的数量==addLErelationship中元素的数量==轨道上的物体总数
-		// Friend中的每个人必定出现在某一层轨道上，Friend中每个人的名字至少在SocialTie中出现一次
-//		addTrack();// 首先先建立第一层轨道
-//		System.out.println("start!");
 		while (normalSm.find())
 		{
 			System.out.println("Find it!");
 			String normalSalphanum1 = normalSm.group(8);// person1
-			// System.out.println(normalSalphanum1);//匹配没问题
 			String normalSalphanum2 = normalSm.group(11);// person2
-			// System.out.println(normalSalphanum2);
 			String normalSfloat1 = normalSm.group(14);// 亲密度
-			// System.out.println(normalSfloat1);
-//			socialTie.put(normalSalphanum1, new HashMap<String, Float>()
-//			{
-//				{
-//					put(normalSalphanum2, Float.parseFloat(normalSfloat1));
-//				}
-//			});// 定义的时候初始化
 			socialTie.add(new tie(normalSalphanum1, normalSalphanum2, Float.parseFloat(normalSfloat1)));
 		}
 	}
@@ -1015,11 +1000,6 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 	// 增加关系（仅限于轨道物体）后重新建立轨道系统
 	public boolean addRelationship(String name1, String name2, float ini)// 这个人必须在轨道上
 	{
-		// objectTrack在增加和减少物体的时候会得到更新
-//		if(objectTrack.containsKey(name1)&&objectTrack.containsKey(name2))
-//		{
-//			
-//		}
 		// 通过名称得到实例
 		if (!friend.containsKey(name1) || !friend.containsKey(name2))
 		{
@@ -1031,153 +1011,7 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 		return true;
 	}
 
-//		if ((name1.equals(central.getName())) || (name2.equals(central.getName())))
-//		{
-//			if (name1.equals(central.getName()))
-//			{
-//				// 能出现在socialTie里面，被加到轨道上的人，一定是被加到了friend里面，反之，friend里面的人不一定都能出现在轨道上
-//				if (!friend.containsKey(name2))
-//				{
-//					System.out.println("The second man doesn't exist!");
-//					return false;
-//				}
-//				socialE1 temp2 = friend.get(name2);
-//				if (!objectTrack.containsKey(temp2))
-//				{
-//					System.out.println("The second man is not in the orbital system!");
-//					return false;
-//				}
-//				superIntimacyFriend.put(name2, ini);
-//				addLErelationship(temp2);
-//				if (objectTrack.get(temp2) != 0)
-//				{
-//					transit(temp2, 0);
-//				}
-//				Set<socialE1> adjust = relationship.get(temp2);
-//				Iterator<socialE1> iterator = adjust.iterator();
-//				while (iterator.hasNext())
-//				{
-//					socialE1 tempE2 = iterator.next();
-//					if (objectTrack.containsKey(tempE2))
-//					{
-//						if (objectTrack.get(tempE2) > 1)
-//						{
-//							transit(tempE2, 1);// 转移到一号轨道，即第二条轨道上来
-//						}
-//					}
-//					else
-//					{
-//						System.out.println("Those associated with him are not included in the map objectTrack");
-//						return false;
-//					}
-//				}
-//
-//			}
-//			else
-//			{
-//				if (!friend.containsKey(name1))
-//				{
-//					System.out.println("The second man doesn't exist!");
-//					return false;
-//				}
-//				socialE1 temp1 = friend.get(name1);
-//				if (!objectTrack.containsKey(temp1))
-//				{
-//					System.out.println("The second man is not in the orbital system!");
-//					return false;
-//				}
-//				superIntimacyFriend.put(name1, ini);
-//				addLErelationship(temp1);
-//				if (objectTrack.get(temp1) != 0)
-//				{
-//					transit(temp1, 0);
-//				}
-//				Set<socialE1> adjust = relationship.get(temp1);
-//				Iterator<socialE1> iterator2 = adjust.iterator();
-//				while (iterator2.hasNext())
-//				{
-//					socialE1 tempE1 = iterator2.next();
-//					if (objectTrack.containsKey(tempE1))
-//					{
-//						if (objectTrack.get(tempE1) > 1)// 此处必须是>1，因为该物体可能和第0号轨道上的物体之间有关系
-//						{
-//							transit(tempE1, 1);// 转移到一号轨道，即第二条轨道上来
-//						}
-//					}
-//					else
-//					{
-//						System.out.println("Those associated with him are not included in the map objectTrack");
-//						return false;
-//					}
-//				}
-//			}
-//		}
-//		else
-//		{
-//
-//			if (!friend.containsKey(name1))
-//			{
-//				System.out.println("The first man doesn't exist!");
-//				return false;
-//			}
-//			if (!friend.containsKey(name2))
-//			{
-//				System.out.println("The second man doesn't exist!");
-//				return false;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name1)))
-//			{
-//				System.out.println("The first man is not in the orbital system!");
-//				return false;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name2)))
-//			{
-//				System.out.println("The second man is not in the orbital system!");
-//				return false;
-//			}
-//			int track1 = objectTrack.get(friend.get(name1));
-//			int track2 = objectTrack.get(friend.get(name2));
-//
-//			intimacyFriend.get(name1).put(name2, ini);
-//			intimacyFriend.get(name2).put(name1, ini);
-//
-//			// 关系映射
-//			addEErelationship(friend.get(name1), friend.get(name2));
-//
-//			if (track1 == track2)
-//			{
-//				;
-//			}
-//			else if (track1 > track2)
-//			{
-//				// 移动之前需要先判断是否更加接近中心点
-//				if (track1 > track2 + 1)
-//				{
-//					transit(friend.get(name1), track2 + 1);// 牵一发而动全身
-//
-//				}
-//				else
-//				{
-//					;// 此时不用移动
-//				}
-//
-//			}
-//			else if (track1 < track2)
-//			{
-//				if (track2 > track1 + 1)
-//				{
-//					transit(friend.get(name2), track1 + 1);
-//				}
-//				else
-//				{
-//					;// 此时不用移动
-//				}
-//			}
-//		}
-//		System.out.println("succeed!");
-//		return true;
-//	}
-//
+
 	// 删除关系（仅限于轨道物体）后重新调整轨道系统
 	public boolean deleteRelationship(String name1, String name2)
 	{
@@ -1206,235 +1040,3 @@ public class socialNetworkCircle extends ConcreteCircularObject<socialL1, social
 		return true;
 	}
 }
-//		if ((name1.equals(central.getName())) || (name2.equals(central.getName())))
-//		{
-//			if (name1.equals(central.getName()))
-//			{
-//				if (!friend.containsKey(name2))
-//				{
-//					System.out.println("The second man doesn't exist!");
-//					return false;
-//				}
-//				socialE1 temp2 = friend.get(name2);
-//				if (!objectTrack.containsKey(temp2))
-//				{
-//					System.out.println("The second man is not in the orbital system!");
-//					return false;
-//				}
-//				// 先把关系删除，再考虑轨道的事情
-//				superIntimacyFriend.remove(name2);
-//				deleteLErelationship(temp2);
-//			}
-//			else
-//			{
-//
-//			}
-//		}
-//		else
-//		{
-//			if (!friend.containsKey(name1))
-//			{
-//				System.out.println("Man one doesn't exist!");
-//				return false;
-//			}
-//			if (!friend.containsKey(name2))
-//			{
-//				System.out.println("Man two doesn't exist!");
-//				return false;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name1)))
-//			{
-//				System.out.println("Man one is not in the orbital system!");
-//				return false;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name2)))
-//			{
-//				System.out.println("Man two is not in the orbital system!");
-//				return false;
-//			}
-//			int track1 = objectTrack.get(friend.get(name1));
-//			int track2 = objectTrack.get(friend.get(name2));
-//
-//			// 先把关系删了，再考虑轨道的事情
-//			intimacyFriend.get(name1).remove(name2);
-//			intimacyFriend.get(name2).remove(name1);
-//			deleteEErelationship(friend.get(name1), friend.get(name2));
-//
-//			if (track1 == track2)
-//			{
-//				// 只需调用一次
-//				;
-//			}
-//			// 2不受影响，1受影响
-//			else if (track1 > track2)
-//			{
-//				int minTrackNumber = 1000;
-//				Iterator<String> iterator = intimacyFriend.get(name1).keySet().iterator();
-//				while (iterator.hasNext())
-//				{
-//					String temp = iterator.next();
-//					if (objectTrack.get(friend.get(temp)) < minTrackNumber)
-//					{
-//						minTrackNumber = objectTrack.get(friend.get(temp));
-//					}
-//				}
-//				// 唯一的关联被切断了，只能移出轨道系统
-//				if (minTrackNumber == 1000)
-//				{
-//					deleteTrackObject(friend.get(name1), objectTrack.get(friend.get(name1)));
-//				}
-//				else
-//				{
-//					transit(friend.get(name1), minTrackNumber);
-//				}
-//			}
-//			// 1不受影响，2受影响
-//			else if (track1 < track2)
-//			{
-//				int minTrackNumber = -1;
-//				Iterator<String> iterator = intimacyFriend.get(name2).keySet().iterator();
-//				while (iterator.hasNext())
-//				{
-//					String temp = iterator.next();
-//					if (objectTrack.get(friend.get(temp)) < minTrackNumber)
-//					{
-//						minTrackNumber = objectTrack.get(friend.get(temp));
-//					}
-//				}
-//				// 唯一的关联被切断了，只能移出轨道系统
-//				if (minTrackNumber == 1000)
-//				{
-//					deleteTrackObject(friend.get(name2), objectTrack.get(friend.get(name2)));
-//				}
-//				else
-//				{
-//					transit(friend.get(name2), minTrackNumber);
-//				}
-//
-//			}
-//		}
-//		System.out.println("succeed!");
-//		return true;
-//	}
-
-//	// 这个函数适用于轨道物体和中心物体
-//	public int shortestLogicalDistance(String name1, String name2)
-//	{
-//		int distance;
-//		//CircularOrbitAPIs<socialL1, socialE1> socialApi = new CircularOrbitAPIs<socialL1, socialE1>();
-//		if ((name1.equals(central.getName())) || (name2.equals(central.getName())))
-//		{
-//			if ((name1.equals(central.getName())))
-//			{
-//				if (friend.containsKey(name2))
-//				{
-//					if (objectTrack.containsKey(friend.get(name2)))
-//					{
-//						distance = objectTrack.get(friend.get(name2))+1;
-//					}
-//					else
-//					{
-//						System.out.println("The name exist,but the person isn't in this orbit system!");
-//						return -3;
-//					}
-//
-//				}
-//				else
-//				{
-//					System.out.println("The name doesn't exist!");
-//					return -3;
-//				}
-//			}
-//			else
-//			{
-//				if (friend.containsKey(name1))
-//				{
-//					if (objectTrack.containsKey(friend.get(name1)))
-//					{
-//						distance = objectTrack.get(friend.get(name1))+1;
-//					}
-//					else
-//					{
-//						System.out.println("The name exist,but the person isn't in this orbit system!");
-//						return -3;
-//					}
-//
-//				}
-//				else
-//				{
-//					System.out.println("The name doesn't exist!");
-//					return -3;
-//				}
-//			}
-//		}
-//		else
-//		{
-//
-//			if (!friend.containsKey(name1))
-//			{
-//				System.out.println("Man one doesn't exist!");
-//				return -3;
-//			}
-//			if (!friend.containsKey(name2))
-//			{
-//				System.out.println("Man two doesn't exist!");
-//				return -3;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name1)))
-//			{
-//				System.out.println("Man one is not in the orbital system!");
-//				return -3;
-//			}
-//			if (!objectTrack.containsKey(friend.get(name2)))
-//			{
-//				System.out.println("Man two is not in the orbital system!");
-//				return -3;
-//			}
-//			
-////			if (objectTrack.get(friend.get(name1)) == objectTrack.get(friend.get(name2)))
-////			{
-////				distance = 0;
-////			}
-////			else if (objectTrack.get(friend.get(name1)) > objectTrack.get(friend.get(name2)))
-////			{
-////				distance = objectTrack.get(friend.get(name1)) - objectTrack.get(friend.get(name2));
-////			}
-////			else
-////			{
-////				distance = objectTrack.get(friend.get(name2)) - objectTrack.get(friend.get(name1));
-////			}
-//		}
-//		System.out.println("The shortest logical distance is " + distance);
-//		return distance;
-//	}
-//}
-
-//class tie
-//{
-//	private final String name1;
-//	private final String name2;
-//	private final float ini;
-//
-//	public tie(String name1, String name2, float ini)
-//	{
-//		this.name1 = name1;
-//		this.name2 = name2;
-//		this.ini = ini;
-//	}
-//
-//	public String getName1()
-//	{
-//		return name1;
-//	}
-//
-//	public String getName2()
-//	{
-//		return name2;
-//	}
-//
-//	public float getIni()
-//	{
-//		return ini;
-//	}
-//
-//}

@@ -27,14 +27,13 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 {
 	int trackNumber;
 	Map<Integer, Set<E>> temptrackObject;
-	// Set<E> things = new HashSet<E>();
 	Map<Integer, Integer> thingsNumberPerTrack = new HashMap<Integer, Integer>();// 必须要开辟一段空间
 	Map<E, position> thingsPosition = new HashMap<E, position>();
 	Map<E, Set<E>> EErelationship;
 	Set<E> LErelationship;
 	List<tie> tempsocialTie;
 	L cretral;
-//	Map<String, E> friend;
+
 
 	public CircularOrbitHelper(circularOrbit c)// 构造函数
 	{
@@ -59,14 +58,6 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 
 	public void visualize()// 最终要调用的函数
 	{
-//		JFrame  jf = new JFrame();
-//		MyPanel jp = new MyPanel();
-//		jf.setBounds(200, 200, 500, 500);
-//		jf.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		jf.add(jp);
-//		jf.setVisible(true);
-//		jp.display();
-//		GraphicsDemod my = new GraphicsDemod();
 		myFrame frame = new myFrame();
 		frame.setVisible(true);
 	}
@@ -84,7 +75,7 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 		public void paintComponent(Graphics g)
 		{
 			// g.drawRoundRect(10, 10, 100, 100, 100, 100);
-			int length = 80;
+			int length = 50;
 			int doubleLength = 2 * length;
 			super.paintComponent(g);
 			int width = getWidth();
@@ -119,8 +110,6 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 								+ (int) (((m + 1) * length) * Math.sin(a + j * partition));
 						// thingsPosition.put(temptrackObject.get(i), new position(x, y));
 						thingsPosition.put(things.get(j), new position(x, y));// 轨道上的每个物体对应于一个坐标
-						// g.setColor(Color.YELLOW);
-						//System.out.println("YEACHYEACH");// 指向到了这一步代码
 						g.setFont(new Font("宋体", Font.PLAIN, 12));
 						g.fillOval(x - 8, y - 8, 16, 16);
 						g.setColor(Color.GREEN);
@@ -136,8 +125,6 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 			// 画轨道物体间的连线
 			//System.out.println("准备画线");// 以上代码没有问题
 			Iterator<E> iterator1 = EErelationship.keySet().iterator();
-			//System.out.println("hhh" + EErelationship.size());
-			//System.out.println("真正准备画线");
 			g.setColor(Color.RED);
 			while (iterator1.hasNext())
 			{
@@ -158,45 +145,18 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 					g.setColor(Color.blue);
 					for(int mn=0; mn<tempsocialTie.size(); mn++)
 					{
-//						if(friend.containsKey(tempsocialTie.get(i).getName1())&&friend.containsKey(tempsocialTie.get(i).getName2()))
-//						{
-//							int numberx = (thingsPosition.get(r1).getX()+thingsPosition.get(m1).getX())/2;
-//							int numbery = (thingsPosition.get(r1).getY()+thingsPosition.get(m1).getY())/2;
-//							g.drawString(Float.toString(tempsocialTie.get(m).getIni()), numberx, numbery);
-//						}
+
 						if((r1.getName().equals(tempsocialTie.get(mn).getName1())&&m1.getName().equals(tempsocialTie.get(mn).getName2()))||(r1.getName().equals(tempsocialTie.get(mn).getName2())&&m1.getName().equals(tempsocialTie.get(mn).getName1())))
 						{
 							int numberx = (thingsPosition.get(r1).getX()+thingsPosition.get(m1).getX())/2;
 							int numbery = (thingsPosition.get(r1).getY()+thingsPosition.get(m1).getY())/2;
 							g.drawString(Float.toString(tempsocialTie.get(mn).getIni()), numberx, numbery);
 						}
-//						if(r1.getName().equals(tempsocialTie.get(m).getName2())&&m1.getName().equals(tempsocialTie.get(m).getName1()))
-//						{
-//							int numberx = ;
-//							int numbery = ;
-//							g.drawString(Float.toString(tempsocialTie.get(m).getIni()), numberx, numbery);
-//						}
+
 					}
 				}
 			}
-//			for (int v = 0; v < tempsocialTie.size(); v++)
-//			{
-//				if (friend.containsKey(tempsocialTie.get(v).getName1())
-//						&& friend.containsKey(tempsocialTie.get(v).getName2()))
-//				{
-//					if (thingsPosition.containsKey(friend.get(tempsocialTie.get(v).getName1()))
-//							&& thingsPosition.containsKey(friend.get(tempsocialTie.get(v).getName2())))
-//					{
-//						int numberx = (thingsPosition.get(friend.get(tempsocialTie.get(v).getName1())).getX()
-//								+ thingsPosition.get(friend.get(tempsocialTie.get(v).getName2())).getX()) / 2;
-//						int numbery = (thingsPosition.get(friend.get(tempsocialTie.get(v).getName1())).getY()
-//								+ thingsPosition.get(friend.get(tempsocialTie.get(v).getName2())).getY()) / 2;
-//						;
-//						g.drawString(Float.toString(tempsocialTie.get(v).getIni()), numberx, numbery);
-//					}
-//
-//				}
-//			}
+
 			// 画中心点与轨道物体的连线
 			Iterator<E> iterator2 = LErelationship.iterator();
 			//System.out.println("eee" + LErelationship.size());
@@ -215,48 +175,9 @@ public class CircularOrbitHelper<L extends L1, E extends E1>
 						int numbery = (thingsPosition.get(r2).getY()+height/2)/2;
 						g.drawString(Float.toString(tempsocialTie.get(v).getIni()), numberx, numbery);
 					}
-//					if(r1.getName().equals(tempsocialTie.get(m).getName2())&&m1.getName().equals(tempsocialTie.get(m).getName1()))
-//					{
-//						int numberx = ;
-//						int numbery = ;
-//						g.drawString(Float.toString(tempsocialTie.get(m).getIni()), numberx, numbery);
-//					}
+
 				}
 			}
-//			for (int u = 0; u < tempsocialTie.size(); u++)
-//			{
-//				if (tempsocialTie.get(u).getName1().equals(cretral.getName()))
-//				{
-//					if (friend.containsKey(tempsocialTie.get(u).getName2()))
-//					{
-//						if (thingsPosition.containsKey(friend.get(tempsocialTie.get(u).getName2())))
-//						{
-//							int numberx = (thingsPosition.get(friend.get(tempsocialTie.get(u).getName2())).getX()
-//									+ (width / 2)) / 2;
-//							int numbery = (thingsPosition.get(friend.get(tempsocialTie.get(u).getName2())).getY()
-//									+ (height / 2)) / 2;
-//							;
-//							g.drawString(Float.toString(tempsocialTie.get(u).getIni()), numberx, numbery);
-//						}
-//					}
-//
-//				}
-//				if (tempsocialTie.get(u).getName2().equals(cretral.getName()))
-//				{
-//					if (friend.containsKey(tempsocialTie.get(u).getName1()))
-//					{
-//						if (thingsPosition.containsKey(friend.get(tempsocialTie.get(u).getName1())))
-//						{
-//							int numberx = (thingsPosition.get(friend.get(tempsocialTie.get(u).getName1())).getX()
-//									+ (width / 2)) / 2;
-//							int numbery = (thingsPosition.get(friend.get(tempsocialTie.get(u).getName1())).getY()
-//									+ (height / 2)) / 2;
-//							;
-//							g.drawString(Float.toString(tempsocialTie.get(u).getIni()), numberx, numbery);
-//						}
-//					}
-//				}
-//			}
 
 		}
 	}

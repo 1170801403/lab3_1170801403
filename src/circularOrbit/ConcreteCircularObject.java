@@ -38,7 +38,7 @@ public class ConcreteCircularObject<L, E> implements circularOrbit<L, E>// �ӿں
 	{
 		assertTrue(physical.size()!=0);
 		assertTrue(relationship.size()!=0);
-		assertTrue(angle.size()!=0);
+
 	}
 	public List<Track> getPhysical()
 	{

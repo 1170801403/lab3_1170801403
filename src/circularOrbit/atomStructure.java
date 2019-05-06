@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -43,9 +44,6 @@ public class atomStructure extends ConcreteCircularObject<atomL1, atomE1>
 			relationship.get(iterator.next()).clear();
 		}
 	}
-	
-	
-	
 	
 	
 	public Map<Integer, Integer> getTrackObjectNumber()
@@ -143,32 +141,19 @@ public class atomStructure extends ConcreteCircularObject<atomL1, atomE1>
 		if (m.find())// 顶多匹配到一次，只需要用if
 		{
 			String word2 = m.group(7);// 原子核名称
-//			central = new atomL1(word2);// 创造中心点物体
 			central = factory.manufactureL(word2);
 			String int1 = m.group(15);// 原子核外轨道数目
 			trackNumber2 = Integer.parseInt(int1);// 确定核外轨道数目
-//			for (int i = 0; i < trackNumber2; i++)// 构造轨道系统
-//			{
-//				addTrack();
-//			}
 
 			for (int i = 0; i < trackNumber2 - 1; i++)
 			{
 				String temp = m.group(22 + i * 4 + 3);
-//				for(int j=0; j<Integer.parseInt(temp); j++)
-//				{
-//					addTrackObject(new atomE1("electrical"), i);//向轨道上加电子
-//				}
+
 				trackObjectNumber.put(i, Integer.parseInt(temp));// 通过轨道号查询该轨道上有多少个电子
 			}
-
-			// 结尾没有分号
+		// 结尾没有分号
 			String temp1 = m.group(22 + (trackNumber2 - 1) * 4 + 3);
-//			for (int j = 0; j < Integer.parseInt(temp1); j++)
-//			{
-//				addTrackObject(new atomE1("electrical"), trackNumber2 - 1);// 向最外层轨道加电子
-//			}
-			//其实读文件的时候就已经初始化了trackObjectNumber
+
 			trackObjectNumber.put(trackNumber2 - 1, Integer.parseInt(temp1));
 		}
 
@@ -197,6 +182,17 @@ public class atomStructure extends ConcreteCircularObject<atomL1, atomE1>
 		checkRep();
 	}
 
+	public void addTrack()// 增加一条轨道,需要首先确定轨道半径，必须大于
+	{
+		System.out.println(trackObject.size());
+		int rep = physical.size() + 1;// 轨道半径 = 轨道编号+1
+		Track temp = realTrackFactory.manufacture(rep);
+		physical.add(temp);
+		trackObject.put(this.getPhysical().size() - 1, new HashSet<atomE1>());
+		trackObjectNumber.put(this.getPhysical().size() - 1, 0);
+		System.out.println(trackObject.size());
+		System.out.println("Succeed!");
+	}
 	//涉及到具体的电子实例，之所以要重写父类中的transit方法，是为了更好的建立轨道
 	public boolean electronicTransition(int source, int target)// 电子跃迁：给定源轨道、目标轨道，模拟电子跃迁，实质：源轨道上减少一个电子，目标轨道上增加一个电子；轨道编号从0开始
 	{
